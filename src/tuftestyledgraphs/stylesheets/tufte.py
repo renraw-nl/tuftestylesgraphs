@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 
-from . import MatplotBaseStyleSheet, StyleDict
+from . import BaseStyleSheet
+from ..types import StyleType
 
 
 @dataclass
-class TufteStyleSheet(MatplotBaseStyleSheet):
+class TufteStyleSheet(BaseStyleSheet):
     """
     A `matplotlib` style sheet using Tufte's principles.
     """
@@ -14,7 +15,7 @@ class TufteStyleSheet(MatplotBaseStyleSheet):
     fontsize: int = 10
 
     @property
-    def figure_style(self) -> StyleDict:
+    def figure_style(self) -> StyleType:
         """
         Provide basic figure styles
         """
@@ -36,7 +37,7 @@ class TufteStyleSheet(MatplotBaseStyleSheet):
         }
 
     @property
-    def grid_style(self) -> StyleDict:
+    def grid_style(self) -> StyleType:
         """
         Provide grid styles
         """
@@ -49,7 +50,7 @@ class TufteStyleSheet(MatplotBaseStyleSheet):
         }
 
     @property
-    def axes_style(self) -> StyleDict:
+    def axes_style(self) -> StyleType:
         """
         Provide axes styles
         """
@@ -61,7 +62,7 @@ class TufteStyleSheet(MatplotBaseStyleSheet):
         }
 
     @property
-    def spines_style(self) -> StyleDict:
+    def spines_style(self) -> StyleType:
         """
         Provide spine styles
 

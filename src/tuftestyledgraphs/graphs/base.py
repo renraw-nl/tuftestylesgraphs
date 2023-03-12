@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Self
+from typing import Any, Self
 
-from matplotlib import pyplot as plt
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
+from matplotlib import pyplot as plt  # type: ignore
+from matplotlib.axes import Axes  # type: ignore
+from matplotlib.figure import Figure  # type: ignore
 
-from ..stylesheets import MatplotBaseStyleSheet, TufteStyleSheet
+from ..stylesheets import BaseStyleSheet, TufteStyleSheet
+from ..types import DataType, StyleType
 
 
 @dataclass
@@ -16,19 +17,24 @@ class BaseGraph:
     """
 
     title: str = None
-    stylesheet: MatplotBaseStyleSheet = None
+    stylesheet: BaseStyleSheet = None
     figsize: tuple[int] = None  # (16, 9)
     _ax: Axes = None
     _fig: Figure = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """
         Reset the style details, and ensure there is an `Axes` object to plot to.
         """
         if not self.stylesheet:
             self.stylesheet = TufteStyleSheet()
 
-        self.stylesheet.reset()
+        # @TODO: This is a hack, but introduces style data into the graph class.
+        # Which should not be.
+        overrides: StyleType = (
+            self.style_overrides if hasattr(self, "style_overrides") else None
+        )
+        self.stylesheet.reset(overrides)
 
     @property
     def ax(self) -> Axes:
@@ -55,7 +61,7 @@ class BaseGraph:
 
         return self._fig
 
-    def rotate_xlabel(self, ratio: float = 0.8) -> Self:
+    def rotate_xlabels(self, ratio: float = 0.8) -> Self:
         """
         Rotate the x-axis labels to `vertical` when the text width exceeds the ratio
         between text width and tick spacing.
@@ -90,7 +96,7 @@ class BaseGraph:
 
         return self
 
-    def add(self, x, y, **kwargs) -> Self:
+    def add(self, x: DataType, y: DataType, **kwargs: Any) -> Self:
         """Add a data set to plot"""
         raise NotImplementedError
 

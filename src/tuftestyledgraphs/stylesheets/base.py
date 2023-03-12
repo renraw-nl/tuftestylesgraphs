@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from typing import TypeVar
 
-import matplotlib as mpl
+import matplotlib as mpl  # type: ignore
 
-StyleDict = TypeVar("StyleDict", bound=dict[str, str | bool | int | float])
+from ..helpers import flag_first_in_loop
+from ..types import StyleType
 
 
 @dataclass
-class MatplotBaseStyleSheet:
+class BaseStyleSheet:
     """
     A basic stylesheet based on `matplotlib`'s `rcParamsDefault`.
     """
@@ -16,7 +16,7 @@ class MatplotBaseStyleSheet:
     colour: str = "black"
     fontsize: int = 10
 
-    def reset(self, overrides: StyleDict = None):
+    def reset(self, overrides: StyleType = None) -> None:
         """
         Reset to default styles, then set those for Tufte-style graphs.
 
@@ -27,16 +27,15 @@ class MatplotBaseStyleSheet:
         #   Path(__package__)) / 'var/rc/tufte.mplstyle'
         # )
 
-        style_properties = dict()
-        for p in dir(self.__class__):
-            if isinstance(getattr(self.__class__, p), property) and p.endswith(
-                "_style"
-            ):
-                style_properties = style_properties | getattr(self, p)
+        style_properties: StyleType = dict()
+        for p, first in flag_first_in_loop(dir(self)):
+            if isinstance(getattr(self, p), dict) and p.endswith("_style"):
+                if first:
+                    style_properties = getattr(self, p)
+                else:
+                    style_properties = style_properties | getattr(self, p)
 
-        if isinstance(overrides, StyleDict):
+        if overrides:
             style_properties = style_properties | overrides
-
-        print(style_properties)
 
         mpl.rcParams.update(style_properties)
