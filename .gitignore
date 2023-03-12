@@ -152,6 +152,7 @@ cython_debug/
 *~
 .DS_Store
 *.swp
+.op/
 
 # Version info, see pyproject.toml
 _version.py
