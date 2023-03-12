@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from . import BaseStyleSheet
+from ..enums import MarkerEnum
 from ..types import StyleType
 
 
@@ -74,3 +75,19 @@ class TufteStyleSheet(BaseStyleSheet):
             "axes.spines.right": False,
             "axes.spines.top": False,
         }
+
+    @property
+    def marker(self) -> StyleType:
+        """
+        Set styles for a line marker.
+
+        One with a little background filled edge to bring it out from the line.
+        """
+        return dict(
+            marker=MarkerEnum.POINT,
+            markersize=4**2,
+            markerfacecolor=self.colour,
+            # markerfacecoloralt='lightsteelblue',
+            markeredgecolor=self.background,
+            markeredgewidth=2.5,
+        )

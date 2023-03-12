@@ -1,6 +1,7 @@
 from importlib.metadata import version
 
 from .graphs.bar import HorizontalBarGraph, VerticalBarGraph  # noqa
+from .graphs.line import LineGraph  # noqa
 from .graphs.scatter import ScatterGraph  # noqa
 from .stylesheets import TufteStyleSheet  # noqa
 

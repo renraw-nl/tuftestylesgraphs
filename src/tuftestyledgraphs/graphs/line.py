@@ -1,14 +1,14 @@
 from typing import Self
 
-from .base import BaseGraph
+from .scatter import ScatterGraph
 from ..types import DataType, StyleType
 
 
-class ScatterGraph(BaseGraph):
+class LineGraph(ScatterGraph):
     """
-    Create a Scatter graph.
+    Create a Line graph.
 
-    Essentially a line graph without the lines.
+    Essentially a scatter graph with the lines.
     """
 
     def add(  # type: ignore
@@ -17,14 +17,11 @@ class ScatterGraph(BaseGraph):
         """
         Add a dataset to the graph
         """
-        self.dots = self.ax.scatter(
+        self.dots = self.ax.plot(
             x,
             y,
+            color=self.stylesheet.colour,
             **self.stylesheet.marker,
-            # marker=MarkerEnum.POINT,
-            # s=size**2,
-            # edgecolor=self.stylesheet.background,
-            # facecolor=colour if colour else self.stylesheet.colour,
         )
 
         return self
