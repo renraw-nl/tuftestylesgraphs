@@ -1,6 +1,7 @@
 from typing import Self
 
 from .base import BaseGraph
+from ..enums import MarkerEnum
 from ..types import DataType, StyleType
 
 
@@ -20,11 +21,10 @@ class ScatterGraph(BaseGraph):
         self.dots = self.ax.scatter(
             x,
             y,
-            **self.stylesheet.marker,
-            # marker=MarkerEnum.POINT,
-            # s=size**2,
-            # edgecolor=self.stylesheet.background,
-            # facecolor=colour if colour else self.stylesheet.colour,
+            marker=MarkerEnum.POINT,
+            s=size**2,
+            edgecolor=self.stylesheet.background,
+            facecolor=colour if colour else self.stylesheet.colour,
         )
 
         return self
