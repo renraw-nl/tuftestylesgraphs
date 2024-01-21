@@ -70,8 +70,8 @@ class TufteStyleSheet(BaseStyleSheet):
         The lines around the graph, easily mixed with the axes lines.
         """
         return {
-            "axes.spines.left": False,
-            "axes.spines.bottom": False,
+            "axes.spines.left": True,
+            "axes.spines.bottom": True,
             "axes.spines.right": False,
             "axes.spines.top": False,
         }

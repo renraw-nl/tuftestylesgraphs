@@ -27,19 +27,19 @@ def flag_last_in_loop(loop_over: Iterable) -> Iterator[tuple[Any, bool]]:
     yield prev, True
 
 
-def flag_ends_in_loop(loop_over: Iterable) -> Iterator[tuple[Any, bool]]:
+def flag_ends_in_loop(loop_over: Iterable) -> Iterator[tuple[Any, bool, bool]]:
     """Loop over an iterable and flag if it is either the __first or the last__."""
     it = iter(loop_over)
     first = next(it)
 
-    yield first, True
+    yield first, True, False
 
     prev = next(it)
     for val in it:
-        yield prev, False
+        yield prev, False, False
         prev = val
 
-    yield prev, True
+    yield prev, False, True
 
 
 def chain_callables(*functions: Callable) -> Callable:

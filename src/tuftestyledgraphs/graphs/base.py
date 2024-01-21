@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt  # type: ignore
 from matplotlib.axes import Axes  # type: ignore
 from matplotlib.figure import Figure  # type: ignore
 
+from ..helpers import flag_first_in_loop
 from ..stylesheets import BaseStyleSheet, TufteStyleSheet
 from ..types import DataType, StyleType
 
@@ -26,6 +27,8 @@ class BaseGraph:
         """
         Reset the style details, and ensure there is an `Axes` object to plot to.
         """
+        plt.close("all")
+
         if not self.stylesheet:
             self.stylesheet = TufteStyleSheet()
 
@@ -89,8 +92,8 @@ class BaseGraph:
         Also closes the plot to allow repeated calls without too much
         interference from previous calls.
         """
-
         plt.show()
+        self.fig.tight_layout()
         self.fig.clear()
         plt.close(self.fig)
 
@@ -115,3 +118,98 @@ class BaseGraph:
         Save the graph to the provided file.
         """
         raise NotImplementedError
+
+    def limit_spines(self, nearest_tick: bool = False) -> Self:
+        """
+        Draw spines covering the data only.
+
+        Optionally limit it to the ticks.
+        """
+        lns = self.ax.lines
+        if len(lns) < 1:
+            return self
+
+        x_lim: tuple[float]
+        y_lim: tuple[float]
+
+        for ln, first in flag_first_in_loop(lns):
+            if not ln:
+                continue
+
+            if first:
+                x_lim = (ln.get_xdata().min(), ln.get_xdata().max())
+                y_lim = (ln.get_ydata().min(), ln.get_ydata().max())
+                continue
+
+            x_lim = self.find_limits(x_lim, ln.get_xdata())
+            y_lim = self.find_limits(y_lim, ln.get_ydata())
+
+        if nearest_tick:
+            x_lim = self.nearest_tick(x_lim, self.ax.get_xticks())
+            y_lim = self.nearest_tick(y_lim, self.ax.get_yticks())
+        else:
+            self.ax.get_xticklabels()
+            # self.ax.set_xticklabels(x[1:-1])
+            # self.ax.set_xticks(self.ax.get_xticks()[1:-1])
+            # self.ax.set_yticks(self.ax.get_yticks()[1:-1])
+
+        sp = self.ax.spines
+        sp.bottom.set_bounds(x_lim[0], x_lim[1])
+        sp.bottom.set_visible(True)
+        sp.left.set_bounds(y_lim[0], y_lim[1])
+        sp.left.set_visible(True)
+
+        return self
+
+    def margins(self, x: float, y: float = None) -> Self:
+        if y:
+            self.ax.margins(x, y)
+        else:
+            self.ax.margins(x)
+
+        return self
+
+    @staticmethod
+    def find_limits(
+        lim: tuple[float | int, float | int],
+        rng: tuple | list | dict,
+    ) -> tuple[float, float]:
+        """
+        Find and return the smallest and largest values of the given range and existing
+        limits.
+        """
+        return (min(lim[1], rng.min()), max(lim[0], rng.max()))
+
+    @staticmethod
+    def nearest_tick(
+        lim: tuple[float | int, float | int],
+        ticks: tuple | list | dict,
+    ) -> tuple[float, float]:
+        """
+        Return the smallest and largest tick nearest to the given limits.
+        """
+
+        low = lim[0]
+        for curr, first in flag_first_in_loop(ticks):
+            if first:
+                prev = curr
+            elif prev <= low and low <= curr:
+                low = prev  # if (low / (curr - prev)) <= 0.5 else curr
+                break
+            else:
+                prev = curr
+
+        high = lim[1]
+        for curr, first in flag_first_in_loop(ticks[::-1]):
+            if first:
+                prev = curr
+            elif curr <= high and high <= prev:
+                high = prev  # if (high / (prev - curr)) <= 0.5 else prev
+                break
+            else:
+                prev = curr
+
+        return (
+            low,
+            high,
+        )
