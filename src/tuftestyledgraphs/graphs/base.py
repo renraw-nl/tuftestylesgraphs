@@ -25,14 +25,16 @@ class BaseGraph:
 
     def __post_init__(self) -> None:
         """
-        Reset the style details, and ensure there is an `Axes` object to plot to.
+        Reset the style details, and ensure there is an `Axes` object to plot
+        to.
         """
         plt.close("all")
 
         if not self.stylesheet:
             self.stylesheet = TufteStyleSheet()
 
-        # @TODO: This is a hack, but introduces style data into the graph class.
+        # @TODO: This is a hack, but introduces style data into the
+        # graph class.
         # Which should not be.
         overrides: StyleType = (
             self.style_overrides if hasattr(self, "style_overrides") else None
@@ -44,7 +46,8 @@ class BaseGraph:
         """
         Return `matplotlib`'s `Axes` object for the current Graph.
 
-        This object was either passed during initiaion of the class, or created below.
+        This object was either passed during initiaion of the class, or
+        created below.
         """
         if not self._ax:
             self._fig, self._ax = plt.subplots(figsize=self.figsize)
@@ -56,8 +59,8 @@ class BaseGraph:
         """
         Return `matplotlib`'s `Figure` object for the current Graph.
 
-        This object was either passed during initiaion of the class, or created by
-        `self.ax`.
+        This object was either passed during initiaion of the class, or
+        created by `self.ax`.
         """
         if not self._fig:
             self._fig = self.ax.get_figure()
@@ -66,13 +69,15 @@ class BaseGraph:
 
     def rotate_xlabels(self, ratio: float = 0.8) -> Self:
         """
-        Rotate the x-axis labels to `vertical` when the text width exceeds the ratio
-        between text width and tick spacing.
+        Rotate the x-axis labels to `vertical` when the text width exceeds the
+        ratio between text width and tick spacing.
         """
         tick_spacing = self.fig.get_figwidth() / float(
             len(self.ax.xaxis.get_majorticklocs())
         )
-        font_size = [v.get_fontsize() for v in self.ax.xaxis.get_majorticklabels()][0]
+        font_size = [
+            v.get_fontsize() for v in self.ax.xaxis.get_majorticklabels()
+        ][0]
         FONT_RATE = 0.01
         char_width = font_size * FONT_RATE
         max_labelwidth = (
@@ -109,7 +114,8 @@ class BaseGraph:
         """
         Show the values in the graph.
 
-        For example, the values or label at the end of a line graph, or a bar graph.
+        For example, the values or label at the end of a line graph, or a
+        bar graph.
         """
         raise NotImplementedError
 
@@ -175,8 +181,8 @@ class BaseGraph:
         rng: tuple | list | dict,
     ) -> tuple[float, float]:
         """
-        Find and return the smallest and largest values of the given range and existing
-        limits.
+        Find and return the smallest and largest values of the given range
+        and existing limits.
         """
         return (min(lim[1], rng.min()), max(lim[0], rng.max()))
 

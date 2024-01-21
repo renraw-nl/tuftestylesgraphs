@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from . import BaseStyleSheet
 from ..enums import MarkerEnum
 from ..types import StyleType
+from . import BaseStyleSheet
 
 
 @dataclass
