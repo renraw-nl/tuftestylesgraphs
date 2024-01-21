@@ -5,7 +5,7 @@ build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry]
 name = "tuftestyledgraphs"
-version = "0.0.0"
+version = "0.1.0"
 description = "Matplotlib graphs using styles inspired by Tufte's principles in 'The Visual Display of Quantitative Information'"
 authors = ["Warner Leijenaar <git@renraw.nl>"]
 readme = "README.md"
@@ -21,20 +21,26 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.11"
-matplotlib = "^3.7.1"
-pandas = "^1.5"
+matplotlib = "^3.0"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2"
-black = "^22.12"
-isort = "^5.11"
-ruff = "^0.0"
-mypy = "^1.0"
-pre-commit = "^2.21"
-interrogate = "^1.5"
-jupyterlab = "^3.6.1"
-watermark = "^2.3.1"
+ruff = "^0.1"
+pre-commit = "^3.0"
+interrogate = "^1.0"
+
+
+[tool.poetry.group.test.dependencies]
+hypothesis = "^6.96"
+pytest = "^7.4"
+pytest-mock = "^3.12"
+
+
+[tool.poetry.group.jupiter.dependencies]
+jupyterlab = "^4.0"
+pandas = "^1.0"
+watermark = "^2.0"
+pyarrow = "^15.0"
 
 
 [tool.poetry-dynamic-versioning]
@@ -53,53 +59,6 @@ markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "utils",
 ]
-
-[tool.mypy]
-allow_redefinition = true
-disallow_any_generics = false
-disallow_subclassing_any = true
-disallow_untyped_calls = false
-disallow_untyped_defs = true
-implicit_reexport = true
-no_implicit_optional = true
-show_error_codes = true
-strict = true
-strict_equality = true
-strict_optional = false
-warn_redundant_casts = true
-warn_return_any = false
-warn_unused_configs = true
-warn_unused_ignores = true
-
-
-[tool.black]
-line-length = 88
-target-version = ["py311"]
-exclude = '''
-/(
-   \.git
-  | \.mypy_cache
-  | \.pytest_cache
-  | \.ruff_cache
-  | \.venv
-  | \.vscode
-  | build
-  | dist
-  | var
-)/
-'''
-
-[tool.isort]
-combine_as_imports = true
-force_grid_wrap = 0
-include_trailing_comma = true
-known_first_party = "builder, tests"
-line_length = 88
-multi_line_output = 3
-no_lines_before = "LOCALFOLDER"
-order_by_type = false
-reverse_relative = true
-profile = "black"
 
 
 [tool.interrogate]
@@ -122,3 +81,101 @@ whitelist-regex = []
 color = true
 # generate-badge = "."
 # badge-format = "svg"
+
+
+[tool.ruff]
+select = ["E", "F"]
+ignore = []
+line-length = 79
+target-version = "py312"
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Note: Ruff supports a top-level `src` option in lieu of isort's `src_paths` setting.
+src = ["src", "tests"]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".idea",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".vscode",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "var",
+    "venv",
+]
+
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 70
+
+[tool.ruff.mccabe]
+# Unlike Flake8, default to a complexity level of 10.
+max-complexity = 10
+
+[tool.ruff.lint]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I001"
+]
+
+# [tool.ruff.lint.isort]
+# known-first-party = ["my_module1", "my_module2"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  # Accepts: "google", "numpy", or "pep257".
+
+
+# pymarkdownlnt configuration (yes both are correct
+# ref. https://github.com/jackdewinter/pymarkdown/blob/main/docs/advanced_configuration.md#alternate-project-configuration-files
+[tool.pymarkdown]
+log = {level = "WARNING", stack-trace = false}
+
+[tool.pymarkdown.extensions]
+markdown-disallow-raw-html = {enabled = true}
+front-matter = {enabled = true}
+# markdown-task-list-items = {enabled = true}
+
+[tool.pymarkdown.plugins]
+# Enabled rules, with some configuration
+emphasis-style = {enabled = true, style = "underscore"}
+heading-style = {enabled = true, style = "atx"}
+ul-indent = {enabled = true, indent = 4}
+
+# disabled rules
+code-block-style = {enabled = false}
+fenced-code-language = {enabled = false}
+line-length = {enabled = false}
+no-blanks-blockquote = {enabled = false}
+no-duplicate-header = {enabled = false}
+ol-prefix = {enabled = false}
+single-h1 = {enabled = false}
