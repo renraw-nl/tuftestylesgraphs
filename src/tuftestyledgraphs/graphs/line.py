@@ -1,10 +1,10 @@
 from typing import Self
 
-from .scatter import ScatterGraph
-from ..types import DataType, StyleType
+from ..types import DataType
+from .base import BaseGraph
 
 
-class LineGraph(ScatterGraph):
+class LineGraph(BaseGraph):
     """
     Create a Line graph.
 
@@ -26,14 +26,14 @@ class LineGraph(ScatterGraph):
 
         return self
 
-    @property
-    def style_overrides(self) -> StyleType:
-        """Define additional styles which get set last."""
-        return {
-            "axes.grid": False,
-            "grid.color": self.stylesheet.background,
-            "xtick.color": self.stylesheet.colour,
-            "ytick.color": self.stylesheet.colour,
-            "xtick.bottom": True,
-            "ytick.left": True,
-        }
+    # @property
+    # def style_overrides(self) -> StyleType:
+    #     """Define additional styles which get set last."""
+    #     return {
+    #         "axes.grid": False,
+    #         "grid.color": self.stylesheet.background,
+    #         "xtick.color": self.stylesheet.colour,
+    #         "ytick.color": self.stylesheet.colour,
+    #         "xtick.bottom": True,
+    #         "ytick.left": True,
+    #     }
