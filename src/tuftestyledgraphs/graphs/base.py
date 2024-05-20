@@ -17,7 +17,6 @@ class BaseGraph:
     Base class for each type of graph, handles the shared basics.
     """
 
-    title: str = None
     stylesheet: BaseStyleSheet = None
     figsize: tuple[int] = None  # (16, 9)
     _ax: Axes = None
@@ -40,6 +39,9 @@ class BaseGraph:
             self.style_overrides if hasattr(self, "style_overrides") else None
         )
         self.stylesheet.reset(overrides)
+
+    def title(self, title: str) -> Self:
+        plt.title(title)
 
     @property
     def ax(self) -> Axes:
@@ -125,7 +127,9 @@ class BaseGraph:
         """
         raise NotImplementedError
 
-    def limit_spines(self, nearest_tick: bool = False) -> Self:
+    def limit_spines(
+        self, x_base: float | int = 1, y_base: float | int = 1
+    ) -> Self:
         """
         Draw spines covering the data only.
 
@@ -150,19 +154,13 @@ class BaseGraph:
             x_lim = self.find_limits(x_lim, ln.get_xdata())
             y_lim = self.find_limits(y_lim, ln.get_ydata())
 
-        if nearest_tick:
-            x_lim = self.nearest_tick(x_lim, self.ax.get_xticks())
-            y_lim = self.nearest_tick(y_lim, self.ax.get_yticks())
-        else:
-            self.ax.get_xticklabels()
-            # self.ax.set_xticklabels(x[1:-1])
-            # self.ax.set_xticks(self.ax.get_xticks()[1:-1])
-            # self.ax.set_yticks(self.ax.get_yticks()[1:-1])
+        x_lim = self.nearest_tick(x_lim, self.ax.get_xticks())
+        y_lim = self.nearest_tick(y_lim, self.ax.get_yticks())
 
         sp = self.ax.spines
-        sp.bottom.set_bounds(x_lim[0], x_lim[1])
+        sp.bottom.set_bounds(*x_lim)
         sp.bottom.set_visible(True)
-        sp.left.set_bounds(y_lim[0], y_lim[1])
+        sp.left.set_bounds(*y_lim)
         sp.left.set_visible(True)
 
         return self
