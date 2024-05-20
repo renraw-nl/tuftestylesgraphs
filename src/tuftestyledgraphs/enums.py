@@ -27,3 +27,11 @@ class MarkerEnum(StrEnum):
     POINT: str = "."
     X: str = "x"
     STAR: str = "*"
+
+
+class StepEnum(StrEnum):
+    """Helper for StepGraph"""
+
+    PRE: str = "pre"
+    MID: str = "mid"
+    POST: str = "post"
