@@ -58,8 +58,8 @@ class TufteStyleSheet(BaseStyleSheet):
         return {
             "xtick.color": self.colour,
             "ytick.color": self.colour,
-            "xtick.bottom": False,
-            "ytick.left": False,
+            "xtick.direction": "in",
+            "ytick.direction": "in",
         }
 
     @property
