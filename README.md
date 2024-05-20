@@ -4,7 +4,6 @@ Matplotlib graphs using styles inspired by Tufte's principles in 'The Visual Dis
 
 Note it is a hobby project, things will vary and change.
 
-
 ## Inspirations and Sources
 
 1. [Tufte](https://www.edwardtufte.com/tufte/)
@@ -12,7 +11,6 @@ Note it is a hobby project, things will vary and change.
 3. Pandas method chaining ([example](https://towardsdatascience.com/using-pandas-method-chaining-to-improve-code-readability-d8517c5626ac))
 4. Matplotlib's [Parts of a Figure](https://matplotlib.org/stable/tutorials/introductory/quick_start.html#parts-of-a-figure)
 5. "Storytelling with data" by Cole Nussbaumer Knaflic ([charts](https://www.storytellingwithdata.com/chart-guide))
-
 
 ## Interface
 
@@ -34,7 +32,6 @@ the graph object should set the basics, such as:
 2. Length of the spines and ticks,
 3. Colors, font type and size.
 
-
 ## Working on
 
 Basics:
@@ -49,18 +46,15 @@ And later on:
 5. Sloped graphs ([Tufte's example](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0003nk), [Storytelling example](https://www.storytellingwithdata.com/blog/2020/7/27/what-is-a-slopegraph))
 6. Highlights, or dimmed data.
 
-
 ### Others
 
 1. Tests,
 2. Typing,
 3. Docs.
 
-
 ## Relation to Tufte and "Storytelling with data"
 
 There is none, other than an attempt to create an python module using `matplotlib` to produce graphs inspired by their ideas.
-
 
 ## License
 
